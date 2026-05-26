@@ -263,6 +263,7 @@ function Tienda() {
     <div
       style={{
         display: "flex",
+        flexWrap: "wrap",
         gap: 20,
         padding: 20,
         backgroundColor: darkMode ? "#111" : "#fff",
@@ -271,7 +272,7 @@ function Tienda() {
       }}
     >
       {/* PRODUCTOS */}
-      <div style={{ flex: 3 }}>
+      <div style={{ flex: 3, minWidth: 300 }}>
         <h1>Productos 💎</h1>
 
         <button onClick={() => setVista("home")}>
@@ -289,7 +290,8 @@ function Tienda() {
             <div
               key={p.id}
               style={{
-                width: 200,
+                width: "100%",
+                maxWidth: 220,
                 border: "1px solid #ccc",
                 borderRadius: 10,
                 padding: 10,
@@ -324,7 +326,7 @@ function Tienda() {
       </div>
 
       {/* CARRITO */}
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, minWidth: 280}}>
         <h2>Carrito 🛒</h2>
 
         <input
@@ -421,6 +423,13 @@ function Tienda() {
 
                   setCarrito([]);
                   setMostrarPago(false);
+
+                  setNombre("");
+                  setTelefono("");
+
+                  setNumeroTarjeta("");
+                  setCvv("");
+                  setFecha("");
 
                 } catch (err) {
 

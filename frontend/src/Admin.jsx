@@ -139,6 +139,7 @@ function Admin() {
   // ======================
   const cerrarSesion = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("admin");
     window.location.href = "/";
   };
 

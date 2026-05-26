@@ -17,6 +17,7 @@ export default function Login() {
 
       if (res.data.success) {
         localStorage.setItem("token", res.data.token);
+        localStorage.setItem("admin", "true");
         navigate("/panel");
       }
     } catch {
@@ -24,14 +25,48 @@ export default function Login() {
     }
   };
 
-  return (
-    <div style={{ padding: 50 }}>
-      <h2>Login Admin 👨‍💼</h2>
+ return (
+  <div
+    style={{
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "#111",
+      padding: 20,
+    }}
+  >
+    <div
+      style={{
+        width: "100%",
+        maxWidth: 350,
+        background: "white",
+        padding: 30,
+        borderRadius: 20,
+        display: "flex",
+        flexDirection: "column",
+        gap: 15,
+        boxShadow: "0 0 20px rgba(0,0,0,0.3)",
+      }}
+    >
+      <h2
+        style={{
+          textAlign: "center",
+          marginBottom: 10,
+        }}
+      >
+        💎 Login Admin
+      </h2>
 
       <input
         placeholder="Usuario"
         value={usuario}
         onChange={(e) => setUsuario(e.target.value)}
+        style={{
+          padding: 12,
+          borderRadius: 10,
+          border: "1px solid #ccc",
+        }}
       />
 
       <input
@@ -39,9 +74,28 @@ export default function Login() {
         placeholder="Contraseña"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
+        style={{
+          padding: 12,
+          borderRadius: 10,
+          border: "1px solid #ccc",
+        }}
       />
 
-      <button onClick={login}>Entrar</button>
+      <button
+        onClick={login}
+        style={{
+          padding: 12,
+          borderRadius: 10,
+          border: "none",
+          background: "black",
+          color: "white",
+          fontWeight: "bold",
+          cursor: "pointer",
+        }}
+      >
+        Entrar
+      </button>
     </div>
-  );
+  </div>
+);
 }

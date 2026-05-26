@@ -15,13 +15,13 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* TIENDA */}
+        
         <Route path="/" element={<Tienda />} />
 
-        {/* LOGIN */}
+        
         <Route path="/admin" element={<Login />} />
 
-        {/* PANEL PROTEGIDO */}
+       
         <Route
           path="/panel"
           element={

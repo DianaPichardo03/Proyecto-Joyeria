@@ -10,7 +10,7 @@ export default function Login() {
 
   const login = async () => {
     try {
-      const res = await axios.post("http://localhost:3001/api/login", {
+      const res = await axios.post("https://proyecto-joyeria-50z0.onrender.com/api/login", {
         usuario,
         password,
       });

@@ -13,9 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
-// ======================
-// DB
-// ======================
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -28,9 +26,7 @@ db.connect((err) => {
   else console.log("DB conectada 🟢");
 });
 
-// ======================
-// MULTER
-// ======================
+
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
@@ -40,17 +36,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// ======================
-// ADMIN
-// ======================
+
 const ADMIN_USER = {
   usuario: "admin",
   password: bcrypt.hashSync("1234", 8),
 };
 
-// ======================
-// LOGIN
-// ======================
+
 app.post("/api/login", (req, res) => {
   const { usuario, password } = req.body;
 
@@ -71,9 +63,7 @@ app.post("/api/login", (req, res) => {
   res.json({ success: true, token });
 });
 
-// ======================
-// TOKEN
-// ======================
+
 const verifyToken = (req, res, next) => {
   const header = req.headers["authorization"];
 
@@ -90,11 +80,8 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// ======================
-// PRODUCTOS
-// ======================
 
-// GET
+
 app.get("/api/productos", (req, res) => {
   db.query("SELECT * FROM productos", (err, r) => {
     if (err) return res.status(500).json(err);
@@ -102,7 +89,7 @@ app.get("/api/productos", (req, res) => {
   });
 });
 
-// AGREGAR
+
 app.post(
   "/api/productos",
   verifyToken,
@@ -122,7 +109,7 @@ app.post(
   }
 );
 
-// EDITAR 🔥 FIX (FALTABA TOKEN)
+
 app.put("/api/productos/:id", verifyToken, (req, res) => {
   const { nombre, precio, stock } = req.body;
 
@@ -136,7 +123,7 @@ app.put("/api/productos/:id", verifyToken, (req, res) => {
   );
 });
 
-// IMAGEN
+
 app.put(
   "/api/productos/imagen/:id",
   verifyToken,
@@ -155,7 +142,7 @@ app.put(
   }
 );
 
-// ELIMINAR 🔥 FIX (YA ESTABA BIEN)
+
 app.delete("/api/productos/:id", verifyToken, (req, res) => {
   db.query("DELETE FROM productos WHERE id=?", [req.params.id], (err) => {
     if (err) return res.status(500).json(err);
@@ -163,9 +150,7 @@ app.delete("/api/productos/:id", verifyToken, (req, res) => {
   });
 });
 
-// ======================
-// COMPRA
-// ======================
+
 app.post("/api/comprar", (req, res) => {
   const { carrito, nombre, telefono, total } = req.body;
 
@@ -190,9 +175,7 @@ app.post("/api/comprar", (req, res) => {
   res.json({ ok: true });
 });
 
-// ======================
-// PEDIDOS
-// ======================
+
 app.get("/api/pedidos", (req, res) => {
   db.query("SELECT * FROM pedidos ORDER BY id DESC", (err, result) => {
     if (err) return res.status(500).json(err);
@@ -211,7 +194,6 @@ app.delete("/api/pedidos/:id", (req, res) => {
   );
 });
 
-// ======================
-// SERVER
-// ======================
+
+
 app.listen(3001, () => console.log("Server listo 🚀"));

@@ -25,12 +25,10 @@ function Admin() {
     localStorage.setItem("dark", value);
   };
 
-  // ======================
-  // PRODUCTOS
-  // ======================
+  
   const cargarProductos = () => {
     axios
-      .get("http://localhost:3001/api/productos")
+      .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
       .then((res) => setProductos(res.data));
   };
 
@@ -38,29 +36,25 @@ function Admin() {
     cargarProductos();
   }, []);
 
-  // ======================
-  // PEDIDOS
-  // ======================
+  
   const cargarPedidos = () => {
     axios
-      .get("http://localhost:3001/api/pedidos")
+      .get("https://proyecto-joyeria-50z0.onrender.com/api/pedidos")
       .then((res) => setPedidos(res.data));
   };
 
   const eliminarPedido = async (id) => {
-    await axios.delete(`http://localhost:3001/api/pedidos/${id}`);
+    await axios.delete(`https://proyecto-joyeria-50z0.onrender.com/api/pedidos/${id}`);
     cargarPedidos();
   };
 
-  // ⭐ NUEVO: ENTREGADO
+  
   const marcarEntregado = async (id) => {
-    await axios.put(`http://localhost:3001/api/pedidos/entregado/${id}`);
+    await axios.put(`https://proyecto-joyeria-50z0.onrender.com/api/pedidos/entregado/${id}`);
     cargarPedidos();
   };
 
-  // ======================
-  // AGREGAR
-  // ======================
+ 
   const agregar = async () => {
     const form = new FormData();
 
@@ -70,7 +64,7 @@ function Admin() {
     form.append("imagen", imagen);
 
     await axios.post(
-      "http://localhost:3001/api/productos",
+      "https://proyecto-joyeria-50z0.onrender.com/api/productos",
       form,
       {
         headers: {
@@ -83,12 +77,10 @@ function Admin() {
     cargarProductos();
   };
 
-  // ======================
-  // EDITAR (FIX IMPORTANTE)
-  // ======================
+  
   const editar = async () => {
     await axios.put(
-      `http://localhost:3001/api/productos/${editandoId}`,
+      `https://proyecto-joyeria-50z0.onrender.com/api/productos/${editandoId}`,
       {
         nombre,
         precio: Number(precio),
@@ -105,14 +97,12 @@ function Admin() {
     cargarProductos();
   };
 
-  // ======================
-  // ELIMINAR PRODUCTO
-  // ======================
+  
   const eliminar = async (id) => {
     if (!window.confirm("¿Eliminar producto?")) return;
 
     await axios.delete(
-      `http://localhost:3001/api/productos/${id}`,
+      `https://proyecto-joyeria-50z0.onrender.com/api/productos/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -123,9 +113,7 @@ function Admin() {
     cargarProductos();
   };
 
-  // ======================
-  // LIMPIAR
-  // ======================
+
   const limpiar = () => {
     setNombre("");
     setPrecio("");
@@ -134,9 +122,7 @@ function Admin() {
     setEditandoId(null);
   };
 
-  // ======================
-  // LOGOUT
-  // ======================
+
   const cerrarSesion = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("admin");
@@ -152,7 +138,7 @@ function Admin() {
         color: darkMode ? "#fff" : "#000",
       }}
     >
-      {/* TOP */}
+      
       <div
         style={{
           display: "flex",
@@ -186,7 +172,7 @@ function Admin() {
 
       <h1>Panel Admin 👨‍💼</h1>
 
-      {/* PEDIDOS */}
+      
       <button
         onClick={() => {
           cargarPedidos();
@@ -214,7 +200,7 @@ function Admin() {
               <p><b>Cantidad:</b> {p.cantidad}</p>
               <p><b>Total:</b> ${p.total}</p>
 
-              {/* ⭐ ENTREGADO */}
+              
               <button
                 onClick={() => marcarEntregado(p.id)}
                 style={{
@@ -247,7 +233,7 @@ function Admin() {
         </div>
       )}
 
-      {/* FORM */}
+      
       <div
         style={{
           width: 320,
@@ -292,7 +278,7 @@ function Admin() {
         )}
       </div>
 
-      {/* PRODUCTOS */}
+      
       <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
         {productos.map((p) => (
           <div
@@ -306,7 +292,7 @@ function Admin() {
             }}
           >
             <img
-              src={`http://localhost:3001/uploads/${p.imagen}`}
+              src={`https://proyecto-joyeria-50z0.onrender.com/uploads/${p.imagen}`}
               style={{
                 width: "100%",
                 height: 200,

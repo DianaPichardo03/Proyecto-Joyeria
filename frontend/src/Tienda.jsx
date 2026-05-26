@@ -13,12 +13,12 @@ function Tienda() {
   const [mostrarPago, setMostrarPago] = useState(false);
   const [mostrarContacto, setMostrarContacto] = useState(false);
 
-  // 💳 pago
+  
   const [numeroTarjeta, setNumeroTarjeta] = useState("");
   const [cvv, setCvv] = useState("");
   const [fecha, setFecha] = useState("");
 
-  // 🌙 modo oscuro
+ 
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("dark") === "true"
   );
@@ -29,19 +29,15 @@ function Tienda() {
     localStorage.setItem("dark", value);
   };
 
-  // ======================
-  // PRODUCTOS
-  // ======================
+  
   useEffect(() => {
     axios
-      .get("http://localhost:3001/api/productos")
+      .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
       .then((res) => setProductos(res.data))
       .catch((err) => console.log(err));
   }, []);
 
-  // ======================
-  // AGREGAR CARRITO
-  // ======================
+ 
   const agregar = (p) => {
     const existe = carrito.find((i) => i.id === p.id);
 
@@ -71,9 +67,7 @@ function Tienda() {
     });
   };
 
-  // ======================
-  // ELIMINAR
-  // ======================
+  
   const eliminar = (id) => {
     setCarrito((prev) =>
       prev
@@ -86,17 +80,13 @@ function Tienda() {
     );
   };
 
-  // ======================
-  // TOTAL
-  // ======================
+  
   const total = carrito.reduce(
     (acc, i) => acc + i.precio * i.cantidad,
     0
   );
 
-  // ======================
-  // WHATSAPP
-  // ======================
+ 
   const enviarWhatsApp = () => {
     let mensaje = "Hola, quiero hacer un pedido:%0A";
 
@@ -113,9 +103,7 @@ function Tienda() {
     window.open(url, "_blank");
   };
 
-  // ======================
-  // HOME
-  // ======================
+  
   if (vista === "home") {
     return (
       <div
@@ -132,7 +120,7 @@ function Tienda() {
           position: "relative",
         }}
       >
-        {/* CENTRO */}
+        
         <div style={{ textAlign: "center" }}>
           <h1> Joyeria Diana </h1>
 
@@ -151,7 +139,7 @@ function Tienda() {
           </button>
         </div>
 
-        {/* ADMIN */}
+        
         <div
           style={{
             position: "absolute",
@@ -175,7 +163,7 @@ function Tienda() {
           </button>
         </div>
 
-        {/* CONTACTO + DARK */}
+        
         <div
           style={{
             position: "absolute",
@@ -186,7 +174,7 @@ function Tienda() {
             gap: 10,
           }}
         >
-          {/* CONTACTO */}
+          
           <div style={{ position: "relative" }}>
             <button
               style={{
@@ -256,9 +244,7 @@ function Tienda() {
     );
   }
 
-  // ======================
-  // TIENDA
-  // ======================
+  
   return (
     <div
       style={{
@@ -271,7 +257,7 @@ function Tienda() {
         minHeight: "100vh",
       }}
     >
-      {/* PRODUCTOS */}
+      
       <div style={{ flex: 3, minWidth: 300 }}>
         <h1>Productos 💎</h1>
 
@@ -325,7 +311,7 @@ function Tienda() {
         </div>
       </div>
 
-      {/* CARRITO */}
+     
       <div style={{ flex: 1, minWidth: 280}}>
         <h2>Carrito 🛒</h2>
 
@@ -410,7 +396,7 @@ function Tienda() {
                 try {
 
                   await axios.post(
-                    "http://localhost:3001/api/comprar",
+                    "https://proyecto-joyeria-50z0.onrender.com/api/comprar",
                     {
                       carrito,
                       nombre,

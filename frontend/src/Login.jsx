@@ -64,7 +64,7 @@ export default function Login() {
           marginBottom: 10,
         }}
       >
-        💎 Login Admin
+        💎 Admin Joyeria
       </h2>
 
       <input

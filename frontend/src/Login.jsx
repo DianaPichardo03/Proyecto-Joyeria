@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+//import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
@@ -8,7 +8,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const login = async () => {
+ {/* const login = async () => {
     try {
       const res = await axios.post("https://proyecto-joyeria-50z0.onrender.com/api/login", {
         usuario,
@@ -21,6 +21,15 @@ export default function Login() {
         navigate("/panel");
       }
     } catch {
+      alert("Login incorrecto ❌");
+    }
+  }; */}
+
+  const login = () => {
+    if (usuario === "admin" && password === "1234") {
+      localStorage.setItem("admin", "true");
+      navigate("/panel");
+    } else {
       alert("Login incorrecto ❌");
     }
   };

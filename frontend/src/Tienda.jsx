@@ -30,12 +30,18 @@ function Tienda() {
   };
 
   
-  useEffect(() => {
+ {/* useEffect(() => {
     axios
-      .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
+     .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
       .then((res) => setProductos(res.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, []); */}
+
+  import productosData from "./data/productos";
+
+    useEffect(() => {
+      setProductos(productosData);
+    }, []);
 
  
   const agregar = (p) => {
@@ -226,7 +232,7 @@ function Tienda() {
             )}
           </div>
 
-          {/* DARK MODE */}
+          
           <button
             style={{
               width: 50,

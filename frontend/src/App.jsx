@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Tienda from "./Tienda";
 import Login from "./Login";
 import Admin from "./Admin";
+import ProtectedRoute from "./ProtectedRoute";
 
 function RutaProtegida({ children }) {
   const admin = localStorage.getItem("admin");

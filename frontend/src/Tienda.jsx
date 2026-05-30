@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import fondo from "./assets/fondo.png";
+import fondo from "./assets/fondo.jpg";
 
 function Tienda() {
   const [productos, setProductos] = useState([]);

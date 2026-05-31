@@ -1,47 +1,37 @@
 # 💎 Joyería Diana - Ecommerce Fullstack
 
-Aplicación web fullstack para venta de joyería desarrollada con **React, Node.js, Express y MySQL**.
+Aplicación web fullstack para venta de joyería desarrollada con React, Node.js, Express y MySQL.
 
-El sistema incluye una tienda online para clientes y un panel administrativo para gestión de productos y pedidos.
+## 🚀 Demo
 
----
+Frontend: https://proyecto-joyeria.vercel.app/
 
-# 🚀 Demo
+## ✨ Características
 
-Frontend:
-https://proyecto-joyeria.vercel.app
-
-Backend API:
-https://proyecto-joyeria-50z0.onrender.com
-
----
-
-# ✨ Características
-
-## 🛍️ Cliente
+### Cliente
 
 * Visualización de productos
 * Carrito de compras
-* Control de stock
 * Simulación de pago
-* Envío de pedido por WhatsApp
+* Envío de pedidos por WhatsApp
+* Control de stock
 * Modo oscuro
 * Diseño responsive
 
-## 👨‍💼 Administrador
+### Administrador
 
 * Login protegido
-* Panel administrativo
-* Agregar productos
+* Autenticación con JWT
+* Crear productos
 * Editar productos
 * Eliminar productos
 * Gestión de pedidos
 * Marcar pedidos como entregados
-* Subida de imágenes
+* Subida de imágenes con Multer
 
 ---
 
-# 🧰 Tecnologías utilizadas
+# 🛠️ Tecnologías
 
 ## Frontend
 
@@ -65,25 +55,24 @@ https://proyecto-joyeria-50z0.onrender.com
 
 * Vercel (Frontend)
 * Render (Backend)
-* Railway / MySQL Cloud
 
 ---
 
 # 📸 Capturas
 
-## 🏠 Home
+## Home
 
 ![Home](./screenshots/home.png)
 
-## 🛒 Tienda
+## Tienda
 
 ![Tienda](./screenshots/tienda.png)
 
-## 🔐 Login Admin
+## Login
 
 ![Login](./screenshots/login.png)
 
-## 👨‍💼 Panel Admin
+## Panel Admin
 
 ![Admin](./screenshots/admin.png)
 
@@ -91,7 +80,7 @@ https://proyecto-joyeria-50z0.onrender.com
 
 # ⚙️ Instalación local
 
-## 1️⃣ Clonar repositorio
+## 1. Clonar repositorio
 
 ```bash
 git clone https://github.com/DianaPichardo03/Proyecto-Joyeria.git
@@ -99,7 +88,7 @@ git clone https://github.com/DianaPichardo03/Proyecto-Joyeria.git
 
 ---
 
-# 🖥️ Frontend
+# 🔹 Frontend
 
 ```bash
 cd frontend
@@ -109,7 +98,7 @@ npm run dev
 
 ---
 
-# 🔧 Backend
+# 🔹 Backend
 
 ```bash
 cd backend
@@ -121,56 +110,46 @@ npm run dev
 
 # 🗄️ Variables de entorno
 
-Crear un archivo `.env` en el backend:
+Crear archivo `.env` en backend:
 
 ```env
-DB_HOST=tu_host
-DB_USER=tu_usuario
-DB_PASSWORD=tu_password
-DB_NAME=tu_base_de_datos
-DB_PORT=tu_puerto
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_NAME=
+DB_PORT=
+JWT_SECRET=
 ```
 
 ---
 
-# 🗃️ Base de datos
+# 🗄️ Base de datos
 
-Importar el archivo:
+Importar:
 
-```bash
+```sql
 broqueles.sql
 ```
 
 ---
 
-# 🔐 Seguridad implementada
+# 📚 Lo que aprendí
 
+* Consumo de APIs
+* CRUD completo
+* Manejo de estados en React
 * Autenticación JWT
-* Contraseñas cifradas con bcrypt
-* Rutas protegidas
-* Validación de sesión
-* Middleware verifyToken
-
----
-
-# 📚 Aprendizajes
-
-Durante este proyecto aprendí:
-
-* CRUD completo con React y Node.js
-* Manejo de estado con Hooks
-* Consumo de APIs con Axios
-* Autenticación con JWT
-* Subida de archivos con Multer
-* Deploy Fullstack
-* Integración Frontend + Backend
-* Manejo de base de datos MySQL
+* Upload de imágenes
+* Deploy fullstack
+* Manejo de rutas protegidas
+* Conexión frontend/backend
+* Persistencia de datos con MySQL
 
 ---
 
 # 👩‍💻 Autor
 
-**Diana Laura Pichardo García**
+Diana Laura Pichardo García
 
 GitHub:
 https://github.com/DianaPichardo03

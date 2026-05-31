@@ -86,17 +86,24 @@ function Admin() {
         nombre,
         precio: Number(precio),
         stock: Number(stock),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-      }
-    );
+      });
 
-    limpiar();
-    cargarProductos();
-  };
+     if (imagen) {
+
+      const form = new FormData();
+
+      form.append("imagen", imagen);
+
+        await axios.put(
+          `${API_URL}/api/productos/imagen/${editandoId}`,
+          form
+        );
+
+      }
+
+      limpiar();
+      cargarProductos();
+    };
 
   
   const eliminar = async (id) => {

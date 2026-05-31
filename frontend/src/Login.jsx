@@ -8,22 +8,6 @@ export default function Login() {
 
   const navigate = useNavigate();
 
- {/* const login = async () => {
-    try {
-      const res = await axios.post("https://proyecto-joyeria-50z0.onrender.com/api/login", {
-        usuario,
-        password,
-      });
-
-      if (res.data.success) {
-        localStorage.setItem("token", res.data.token);
-        localStorage.setItem("admin", "true");
-        navigate("/panel");
-      }
-    } catch {
-      alert("Login incorrecto ❌");
-    }
-  }; */}
 
   const login = () => {
     if (usuario === "admin" && password === "1234") {

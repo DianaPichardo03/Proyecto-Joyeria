@@ -30,18 +30,13 @@ function Tienda() {
   };
 
   
- {/* useEffect(() => {
+  useEffect(() => {
     axios
      .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
       .then((res) => setProductos(res.data))
       .catch((err) => console.log(err));
-  }, []); */}
+  }, []);
 
-  import productosData from "./data/productos";
-
-    useEffect(() => {
-      setProductos(productosData);
-    }, []);
 
  
   const agregar = (p) => {
@@ -49,7 +44,6 @@ function Tienda() {
 
     const cantidad = existe ? existe.cantidad : 0;
 
-    // 🚫 validar stock
     if (cantidad >= p.stock) {
       alert("Sin stock disponible ❌");
       return;
@@ -291,7 +285,7 @@ function Tienda() {
               }}
             >
               <img
-                src={`http://localhost:3001/uploads/${p.imagen}`}
+                src={`https://proyecto-joyeria-50z0.onrender.com/uploads/${p.imagen}`}
                 style={{
                   width: "100%",
                   borderRadius: 10,

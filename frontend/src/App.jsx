@@ -5,12 +5,6 @@ import Login from "./Login";
 import Admin from "./Admin";
 import ProtectedRoute from "./ProtectedRoute";
 
-function RutaProtegida({ children }) {
-  const admin = localStorage.getItem("admin");
-
-  return admin ? children : <Navigate to="/admin" />;
-}
-
 function App() {
   return (
     <BrowserRouter>
@@ -26,9 +20,9 @@ function App() {
         <Route
           path="/panel"
           element={
-            <RutaProtegida>
+            <ProtectedRoute>
               <Admin />
-            </RutaProtegida>
+            </ProtectedRoute>
           }
         />
 

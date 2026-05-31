@@ -188,6 +188,17 @@ app.get("/api/pedidos", (req, res) => {
   });
 });
 
+app.put("/api/pedidos/entregado/:id", (req, res) => {
+  db.query(
+    "UPDATE pedidos SET entregado = 1 WHERE id=?",
+    [req.params.id],
+    (err) => {
+      if (err) return res.status(500).json(err);
+      res.json({ ok: true });
+    }
+  );
+});
+
 app.delete("/api/pedidos/:id", (req, res) => {
   db.query(
     "DELETE FROM pedidos WHERE id=?",

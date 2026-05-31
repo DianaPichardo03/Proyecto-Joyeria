@@ -30,7 +30,8 @@ function Admin() {
   const cargarProductos = () => {
     axios
       .get(`${API_URL}/api/productos`)
-      .then((res) => setProductos(res.data));
+      .then((res) => setProductos(res.data))
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
@@ -41,28 +42,39 @@ function Admin() {
   const cargarPedidos = () => {
     axios
       .get(`${API_URL}/api/pedidos`)
-      .then((res) => setPedidos(res.data));
+      .then((res) => setPedidos(res.data))
+      .catch((err) => console.log(err));
   };
 
   const eliminarPedido = async (id) => {
+    try {
     await axios.delete(`${API_URL}/api/pedidos/${id}`);
     cargarPedidos();
-  };
-
+  } catch (err) {
+    console.log(err);
+  }
+};
   
   const marcarEntregado = async (id) => {
+    try {
     await axios.put(`${API_URL}/api/pedidos/entregado/${id}`);
     cargarPedidos();
-  };
-
+  } catch (err) {
+    console.log(err);
+  }
+};
  
   const agregar = async () => {
+    try{
     const form = new FormData();
 
     form.append("nombre", nombre);
     form.append("precio", Number(precio));
     form.append("stock", Number(stock));
+
+    if (imagen) {
     form.append("imagen", imagen);
+    }
 
     await axios.post(
       `${API_URL}/api/productos`,
@@ -76,17 +88,30 @@ function Admin() {
 
     limpiar();
     cargarProductos();
-  };
+
+    alert("Producto agregado ✅");
+  } catch (err) {
+    console.log(err);
+    alert("Error al agregar producto ❌");
+  }
+};
 
   
   const editar = async () => {
+    try {
     await axios.put(
       `${API_URL}/api/productos/${editandoId}`,
       {
         nombre,
         precio: Number(precio),
         stock: Number(stock),
-      });
+      },
+      {
+        headers: {
+            Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
      if (imagen) {
 
@@ -96,18 +121,28 @@ function Admin() {
 
         await axios.put(
           `${API_URL}/api/productos/imagen/${editandoId}`,
-          form
+          form,
+          {
+            headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
         );
-
       }
 
       limpiar();
       cargarProductos();
-    };
+      alert("Producto actualizado ✅");
+    } catch (err) {
+      console.log(err);
+      alert("Error al editar producto ❌");
+    }
+  };
 
   
   const eliminar = async (id) => {
     if (!window.confirm("¿Eliminar producto?")) return;
+    try {
 
     await axios.delete(
       `${API_URL}/api/productos/${id}`,
@@ -119,8 +154,10 @@ function Admin() {
     );
 
     cargarProductos();
-  };
-
+  } catch (err) {
+    console.log(err);
+  }
+};
 
   const limpiar = () => {
     setNombre("");
@@ -192,7 +229,20 @@ function Admin() {
 
       {mostrarPedidos && (
         <div style={{ marginBottom: 30 }}>
-          {pedidos.map((p) => (
+          {pedidos.length === 0 ? (
+
+          <p
+            style={{
+              marginTop: 20,
+              fontSize: 18,
+              fontWeight: "bold",
+            }}
+          >
+            No hay pedidos 📦
+          </p>
+
+        ) : (
+          pedidos.map((p) => (
             <div
               key={p.id}
               style={{
@@ -237,7 +287,8 @@ function Admin() {
                 🗑
               </button>
             </div>
-          ))}
+          ))
+        )}
         </div>
       )}
 
@@ -301,6 +352,7 @@ function Admin() {
           >
             <img
               src={`${API_URL}/uploads/${p.imagen}`}
+              alt= {p.nombre}
               style={{
                 width: "100%",
                 height: 200,

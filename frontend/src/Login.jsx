@@ -9,20 +9,31 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-const login = () => {
-  if (usuario === "admin" && password === "1234") {
+const login = async () => {
+
+    try {
+
+    const res = await axios.post(
+      `${API_URL}/api/login`,
+      {
+        usuario,
+        password,
+      }
+    );
+
+    localStorage.setItem("token", res.data.token);
 
     localStorage.setItem("admin", "true");
 
     navigate("/panel");
 
-  } else {
-
-    localStorage.removeItem("admin");
+    } catch (err) {
 
     alert("Login incorrecto ❌");
-  }
-};
+
+    }
+    };
+
 
  return (
   <div

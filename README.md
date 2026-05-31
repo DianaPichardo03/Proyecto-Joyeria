@@ -149,7 +149,7 @@ broqueles.sql
 
 # 👩‍💻 Autor
 
-Diana Laura Pichardo García
+ISC. Diana Laura Pichardo García
 
 GitHub:
 https://github.com/DianaPichardo03

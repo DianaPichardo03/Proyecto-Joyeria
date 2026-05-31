@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
@@ -29,8 +31,11 @@ const db = mysql.createConnection({
 });
 
 db.connect((err) => {
-  if (err) console.log(err);
-  else console.log("DB conectada 🟢");
+  if (err){
+     console.log(err);
+  } else {
+     console.log("DB conectada 🟢");
+  }
 });
 
 
@@ -64,7 +69,7 @@ app.post("/api/login", (req, res) => {
     return res.status(401).json({ success: false });
   }
 
-  const token = jwt.sign({ usuario }, "SECRET123", {
+  const token = jwt.sign({ usuario }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
 
@@ -85,7 +90,7 @@ const verifyToken = (req, res, next) => {
 
     const token = header.replace("Bearer ", "");
 
-    jwt.verify(token, "SECRET123");
+    jwt.verify(token, process.env.JWT_SECRET);
 
     next();
 
@@ -99,7 +104,9 @@ const verifyToken = (req, res, next) => {
 
 app.get("/api/productos", (req, res) => {
   db.query("SELECT * FROM productos", (err, r) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      return res.status(500).json(err);
+    }
     res.json(r);
   });
 });
@@ -146,6 +153,9 @@ app.put(
   "/api/productos/imagen/:id", verifyToken,
   upload.single("imagen"),
   (req, res) => {
+  if (!req.file){
+    return res.status(400).json({ error: "No se subió imagen", });
+  }
     const imagen = req.file.filename;
 
     db.query(
@@ -182,7 +192,9 @@ app.post("/api/comprar", (req, res) => {
       "INSERT INTO pedidos (nombre, telefono, producto, cantidad, total) VALUES (?,?,?,?,?)",
       [nombre, telefono, item.nombre, item.cantidad, total],
       (err) => {
-        if (err) console.log(err);
+        if (err){
+           console.log(err);
+        }
       }
     );
 
@@ -190,7 +202,9 @@ app.post("/api/comprar", (req, res) => {
       "UPDATE productos SET stock = stock - ? WHERE id=?",
       [item.cantidad, item.id],
       (err) => {
-        if (err) console.log(err);
+        if (err) {
+          console.log(err);
+        }
       }
     );
   });
@@ -199,7 +213,7 @@ app.post("/api/comprar", (req, res) => {
 });
 
 
-app.get("/api/pedidos", (req, res) => {
+app.get("/api/pedidos", verifyToken, (req, res) => {
   db.query("SELECT * FROM pedidos ORDER BY id DESC", (err, result) => {
     if (err) {
       return res.status(500).json(err);
@@ -208,7 +222,7 @@ app.get("/api/pedidos", (req, res) => {
   });
 });
 
-app.put("/api/pedidos/entregado/:id", (req, res) => {
+app.put("/api/pedidos/entregado/:id", verifyToken, (req, res) => {
   db.query(
     "UPDATE pedidos SET entregado = 1 WHERE id=?",
     [req.params.id],
@@ -221,7 +235,7 @@ app.put("/api/pedidos/entregado/:id", (req, res) => {
   );
 });
 
-app.delete("/api/pedidos/:id", (req, res) => {
+app.delete("/api/pedidos/:id", verifyToken, (req, res) => {
   db.query(
     "DELETE FROM pedidos WHERE id=?",
     [req.params.id],
@@ -236,4 +250,6 @@ app.delete("/api/pedidos/:id", (req, res) => {
 
 
 
-app.listen(process.env.PORT || 3001, () => console.log("Server listo 🚀"));
+app.listen(process.env.PORT || 3001, () => {
+  console.log("Server listo 🚀");
+});

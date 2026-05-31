@@ -41,14 +41,20 @@ function Admin() {
   
   const cargarPedidos = () => {
     axios
-      .get(`${API_URL}/api/pedidos`)
+      .get(`${API_URL}/api/pedidos`,{
+        headers: { Authorization: `Bearer ${token}`, 
+      },
+  })
       .then((res) => setPedidos(res.data))
       .catch((err) => console.log(err));
   };
 
   const eliminarPedido = async (id) => {
     try {
-    await axios.delete(`${API_URL}/api/pedidos/${id}`);
+    await axios.delete(`${API_URL}/api/pedidos/${id}`,
+      { headers: { Authorization: `Bearer ${token}`, 
+    }, 
+  });
     cargarPedidos();
   } catch (err) {
     console.log(err);
@@ -57,7 +63,10 @@ function Admin() {
   
   const marcarEntregado = async (id) => {
     try {
-    await axios.put(`${API_URL}/api/pedidos/entregado/${id}`);
+    await axios.put(`${API_URL}/api/pedidos/entregado/${id}`,
+      {}, { headers: { Authorization: `Bearer ${token}`, 
+    }, 
+  });
     cargarPedidos();
   } catch (err) {
     console.log(err);
@@ -310,12 +319,14 @@ function Admin() {
         />
 
         <input
+          type="number"
           placeholder="Precio"
           value={precio}
           onChange={(e) => setPrecio(e.target.value)}
         />
 
         <input
+          type="number"
           placeholder="Stock"
           value={stock}
           onChange={(e) => setStock(e.target.value)}

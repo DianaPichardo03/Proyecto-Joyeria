@@ -325,11 +325,12 @@ function Tienda() {
         />
 
         <input
+          type="number"
           placeholder="Teléfono"
-          maxLength={10}
           value={telefono}
           onChange={(e) => {
-            const value = e.target.value.replace(/\D/g, "");
+            const value = e.target.value.replace(/\D/g, "")
+            .slice(0, 10);
             setTelefono(value);
           }}
         />
@@ -359,21 +360,23 @@ function Tienda() {
             <h3>Pago 💳</h3>
 
             <input
+              type="number"
               placeholder="Número tarjeta"
-              maxLength={16}
               value={numeroTarjeta}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "");
+                const value = e.target.value.replace(/\D/g, "")
+                .slice(0, 16);
                 setNumeroTarjeta(value);
               }}
             />
 
             <input
+              type="number"
               placeholder="CVV"
-              maxLength={3}
               value={cvv}
               onChange={(e) => {
-                const value = e.target.value.replace(/\D/g, "");
+                const value = e.target.value.replace(/\D/g, "")
+                .slice(0, 3);
                 setCvv(value);
               }}
             />

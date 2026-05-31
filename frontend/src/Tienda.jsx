@@ -326,10 +326,12 @@ function Tienda() {
 
         <input
           placeholder="Teléfono"
+          maxLength={10}
           value={telefono}
-          onChange={(e) =>
-            setTelefono(e.target.value)
-          }
+          onChange={(e) => {
+            const value = e.target.value.replace(/\D/g, "");
+            setTelefono(value);
+          }}
         />
 
         {carrito.map((p) => (
@@ -368,8 +370,12 @@ function Tienda() {
 
             <input
               placeholder="CVV"
+              maxLength={3}
               value={cvv}
-              onChange={(e) => setCvv(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value.replace(/\D/g, "");
+                setCvv(value);
+              }}
             />
 
             <input
@@ -394,10 +400,40 @@ function Tienda() {
             <button
               onClick={async () => {
 
+                if (!nombre){
+                  alert("Ingresa tu nombre ❌");
+                  return;
+                }
+
+                if (telefono.length !== 10){
+                  alert("Teléfono inválido ❌");
+                  return;
+                }
+
+                  if (carrito.length === 0) {
+                    alert("El carrito está vacío ❌");
+                    return;
+                  }
+                
+                  if (numeroTarjeta.length !== 16) {
+                    alert("La tarjeta debe tener 16 números ❌");
+                    return;
+                  }
+
+                  if (cvv.length !== 3) {
+                    alert("El CVV debe tener 3 números ❌");
+                    return;
+                  }
+
+                   if (fecha.length !== 5) {
+                    alert("Fecha inválida ❌");
+                    return;
+                  }
+
                 try {
 
                   await axios.post(
-                    "${API_URL}/api/comprar",
+                    `${API_URL}/api/comprar`,
                     {
                       carrito,
                       nombre,

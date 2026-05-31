@@ -68,25 +68,6 @@ app.post("/api/login", (req, res) => {
   res.json({ success: true, token });
 });
 
-
-const verifyToken = (req, res, next) => {
-  const header = req.headers["authorization"];
-
-  if (!header) {
-    return res.status(403).json({ error: "No token" });
-  }
-
-  try {
-    const token = header.replace("Bearer ", ""); // 🔥 FIX CLAVE
-    jwt.verify(token, "SECRET123");
-    next();
-  } catch (err) {
-    return res.status(403).json({ error: "Token inválido" });
-  }
-};
-
-
-
 app.get("/api/productos", (req, res) => {
   db.query("SELECT * FROM productos", (err, r) => {
     if (err) return res.status(500).json(err);
@@ -97,7 +78,6 @@ app.get("/api/productos", (req, res) => {
 
 app.post(
   "/api/productos",
-  verifyToken,
   upload.single("imagen"),
   (req, res) => {
     const { nombre, precio, stock } = req.body;
@@ -115,7 +95,7 @@ app.post(
 );
 
 
-app.put("/api/productos/:id", verifyToken, (req, res) => {
+app.put("/api/productos/:id", (req, res) => {
   const { nombre, precio, stock } = req.body;
 
   db.query(
@@ -131,7 +111,6 @@ app.put("/api/productos/:id", verifyToken, (req, res) => {
 
 app.put(
   "/api/productos/imagen/:id",
-  verifyToken,
   upload.single("imagen"),
   (req, res) => {
     const imagen = req.file.filename;
@@ -148,7 +127,7 @@ app.put(
 );
 
 
-app.delete("/api/productos/:id", verifyToken, (req, res) => {
+app.delete("/api/productos/:id", (req, res) => {
   db.query("DELETE FROM productos WHERE id=?", [req.params.id], (err) => {
     if (err) return res.status(500).json(err);
     res.json({ ok: true });

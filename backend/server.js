@@ -15,10 +15,11 @@ app.use("/uploads", express.static("uploads"));
 
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "broqueles",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 
 db.connect((err) => {
@@ -196,4 +197,4 @@ app.delete("/api/pedidos/:id", (req, res) => {
 
 
 
-app.listen(3001, () => console.log("Server listo 🚀"));
+app.listen(process.env.PORT || 3001, () => console.log("Server listo 🚀"));

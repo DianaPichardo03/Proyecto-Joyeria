@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import fondo from "./assets/fondo.png";
+import API_URL from "./config";
 
 function Tienda() {
   const [productos, setProductos] = useState([]);
@@ -32,7 +33,7 @@ function Tienda() {
   
   useEffect(() => {
     axios
-     .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
+     .get(`${API_URL}/api/productos`)
       .then((res) => setProductos(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -285,7 +286,7 @@ function Tienda() {
               }}
             >
               <img
-                src={`https://proyecto-joyeria-50z0.onrender.com/uploads/${p.imagen}`}
+                src={`${API_URL}/uploads/${p.imagen}`}
                 style={{
                   width: "100%",
                   borderRadius: 10,
@@ -396,7 +397,7 @@ function Tienda() {
                 try {
 
                   await axios.post(
-                    "https://proyecto-joyeria-50z0.onrender.com/api/comprar",
+                    "${API_URL}/api/comprar",
                     {
                       carrito,
                       nombre,

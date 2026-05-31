@@ -2,7 +2,6 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
-const path = require("path");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -55,7 +54,8 @@ app.post("/api/login", (req, res) => {
     return res.status(401).json({ success: false });
   }
 
-  const valid = bcrypt.compareSync(password, ADMIN_USER.password);
+  const valid = bcrypt.compareSync(
+    password, ADMIN_USER.password);
 
   if (!valid) {
     return res.status(401).json({ success: false });
@@ -68,6 +68,32 @@ app.post("/api/login", (req, res) => {
   res.json({ success: true, token });
 });
 
+const verifyToken = (req, res, next) => {
+
+  const header = req.headers["authorization"];
+
+  if (!header) {
+    return res.status(403).json({
+      error: "No token",
+    });
+  }
+
+  try {
+
+    const token = header.replace("Bearer ", "");
+
+    jwt.verify(token, "SECRET123");
+
+    next();
+
+  } catch (err) {
+     return res.status(403).json({
+      error: "Token inválido",
+    });
+
+  }
+};
+
 app.get("/api/productos", (req, res) => {
   db.query("SELECT * FROM productos", (err, r) => {
     if (err) return res.status(500).json(err);
@@ -77,7 +103,7 @@ app.get("/api/productos", (req, res) => {
 
 
 app.post(
-  "/api/productos",
+  "/api/productos", verifyToken,
   upload.single("imagen"),
   (req, res) => {
     const { nombre, precio, stock } = req.body;
@@ -87,7 +113,9 @@ app.post(
       "INSERT INTO productos (nombre,precio,stock,imagen) VALUES (?,?,?,?)",
       [nombre, precio, stock, imagen],
       (err) => {
-        if (err) return res.status(500).json(err);
+        if (err){
+           return res.status(500).json(err);
+        }
         res.json({ ok: true });
       }
     );
@@ -95,14 +123,16 @@ app.post(
 );
 
 
-app.put("/api/productos/:id", (req, res) => {
+app.put("/api/productos/:id", verifyToken, (req, res) => {
   const { nombre, precio, stock } = req.body;
 
   db.query(
     "UPDATE productos SET nombre=?, precio=?, stock=? WHERE id=?",
     [nombre, precio, stock, req.params.id],
     (err) => {
-      if (err) return res.status(500).json(err);
+      if (err) {
+         return res.status(500).json(err);
+      }
       res.json({ ok: true });
     }
   );
@@ -110,7 +140,7 @@ app.put("/api/productos/:id", (req, res) => {
 
 
 app.put(
-  "/api/productos/imagen/:id",
+  "/api/productos/imagen/:id", verifyToken,
   upload.single("imagen"),
   (req, res) => {
     const imagen = req.file.filename;
@@ -119,7 +149,9 @@ app.put(
       "UPDATE productos SET imagen=? WHERE id=?",
       [imagen, req.params.id],
       (err) => {
-        if (err) return res.status(500).json(err);
+        if (err) {
+           return res.status(500).json(err);
+        }
         res.json({ ok: true });
       }
     );
@@ -127,9 +159,13 @@ app.put(
 );
 
 
-app.delete("/api/productos/:id", (req, res) => {
-  db.query("DELETE FROM productos WHERE id=?", [req.params.id], (err) => {
-    if (err) return res.status(500).json(err);
+app.delete("/api/productos/:id", verifyToken, (req, res) => {
+  db.query("DELETE FROM productos WHERE id=?", 
+    [req.params.id], (err) => {
+
+    if (err) {
+      return res.status(500).json(err);
+    }
     res.json({ ok: true });
   });
 });
@@ -162,7 +198,9 @@ app.post("/api/comprar", (req, res) => {
 
 app.get("/api/pedidos", (req, res) => {
   db.query("SELECT * FROM pedidos ORDER BY id DESC", (err, result) => {
-    if (err) return res.status(500).json(err);
+    if (err) {
+      return res.status(500).json(err);
+    }
     res.json(result);
   });
 });
@@ -172,7 +210,9 @@ app.put("/api/pedidos/entregado/:id", (req, res) => {
     "UPDATE pedidos SET entregado = 1 WHERE id=?",
     [req.params.id],
     (err) => {
-      if (err) return res.status(500).json(err);
+      if (err) {
+        return res.status(500).json(err);
+      }
       res.json({ ok: true });
     }
   );
@@ -183,7 +223,9 @@ app.delete("/api/pedidos/:id", (req, res) => {
     "DELETE FROM pedidos WHERE id=?",
     [req.params.id],
     (err) => {
-      if (err) return res.status(500).json(err);
+      if (err) {
+        return res.status(500).json(err);
+      }
       res.json({ ok: true });
     }
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import API_URL from "./config";
 
 function Admin() {
   const [nombre, setNombre] = useState("");
@@ -28,7 +29,7 @@ function Admin() {
   
   const cargarProductos = () => {
     axios
-      .get("https://proyecto-joyeria-50z0.onrender.com/api/productos")
+      .get(`${API_URL}/api/productos`)
       .then((res) => setProductos(res.data));
   };
 
@@ -39,18 +40,18 @@ function Admin() {
   
   const cargarPedidos = () => {
     axios
-      .get("https://proyecto-joyeria-50z0.onrender.com/api/pedidos")
+      .get(`${API_URL}/api/pedidos`)
       .then((res) => setPedidos(res.data));
   };
 
   const eliminarPedido = async (id) => {
-    await axios.delete(`https://proyecto-joyeria-50z0.onrender.com/api/pedidos/${id}`);
+    await axios.delete(`${API_URL}/api/pedidos/${id}`);
     cargarPedidos();
   };
 
   
   const marcarEntregado = async (id) => {
-    await axios.put(`https://proyecto-joyeria-50z0.onrender.com/api/pedidos/entregado/${id}`);
+    await axios.put(`${API_URL}/api/pedidos/entregado/${id}`);
     cargarPedidos();
   };
 
@@ -64,7 +65,7 @@ function Admin() {
     form.append("imagen", imagen);
 
     await axios.post(
-      "https://proyecto-joyeria-50z0.onrender.com/api/productos",
+      `${API_URL}/api/productos`,
       form,
       {
         headers: {
@@ -80,7 +81,7 @@ function Admin() {
   
   const editar = async () => {
     await axios.put(
-      `https://proyecto-joyeria-50z0.onrender.com/api/productos/${editandoId}`,
+      `${API_URL}/api/productos/${editandoId}`,
       {
         nombre,
         precio: Number(precio),
@@ -102,7 +103,7 @@ function Admin() {
     if (!window.confirm("¿Eliminar producto?")) return;
 
     await axios.delete(
-      `https://proyecto-joyeria-50z0.onrender.com/api/productos/${id}`,
+      `${API_URL}/api/productos/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -292,7 +293,7 @@ function Admin() {
             }}
           >
             <img
-              src={`https://proyecto-joyeria-50z0.onrender.com/uploads/${p.imagen}`}
+              src={`${API_URL}/uploads/${p.imagen}`}
               style={{
                 width: "100%",
                 height: 200,

@@ -1,5 +1,7 @@
 import { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_URL from "./config";
 
 export default function Login() {
   const [usuario, setUsuario] = useState("");
@@ -7,15 +9,36 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+const login = async () => {
 
-  const login = () => {
-    if (usuario === "admin" && password === "1234") {
-      localStorage.setItem("admin", "true");
-      navigate("/panel");
-    } else {
-      alert("Login incorrecto ❌");
-    }
-  };
+  try {
+
+    const res = await axios.post(
+      `${API_URL}/api/login`,
+      {
+        usuario,
+        password,
+      }
+    );
+
+    localStorage.setItem(
+      "token",
+      res.data.token
+    );
+
+    localStorage.setItem(
+      "admin",
+      "true"
+    );
+
+    navigate("/panel");
+
+  } catch (err) {
+
+    alert("Login incorrecto ❌");
+
+  }
+};
 
  return (
   <div

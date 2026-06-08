@@ -139,7 +139,7 @@ app.post(
     );
   }
   catch (err) { 
-    console.log(err); 
+    console.log("ERROR CLOUDINARY:", err); 
     res.status(500).json({ 
       error: "Error al subir imagen", 
     }); 

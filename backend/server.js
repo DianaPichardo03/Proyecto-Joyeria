@@ -119,9 +119,16 @@ app.get("/api/productos", (req, res) => {
 app.post(
   "/api/productos", verifyToken,
   upload.single("imagen"),
-  (req, res) => {
+  async (req, res) => {
+    try{
     const { nombre, precio, stock } = req.body;
-    const imagen = req.file ? req.file.path : "";
+    let imagen = "";
+    if (req.file) { 
+      const result = await cloudinary.uploader.upload( 
+        req.file.path 
+      ); 
+      imagen = result.secure_url; 
+    }
 
     db.query(
       "INSERT INTO productos (nombre,precio,stock,imagen) VALUES (?,?,?,?)",
@@ -134,7 +141,15 @@ app.post(
       }
     );
   }
+  catch (err) { 
+    console.log(err); 
+    res.status(500).json({ 
+      error: "Error al subir imagen", 
+    }); 
+  } 
+} 
 );
+
 
 
 app.put("/api/productos/:id", verifyToken, (req, res) => {
@@ -160,7 +175,8 @@ app.put(
   if (!req.file){
     return res.status(400).json({ error: "No se subió imagen", });
   }
-    const imagen = req.file.path;
+    const result = await cloudinary.uploader.upload(req.file.path); 
+    const imagen = result.secure_url;
 
     db.query(
       "UPDATE productos SET imagen=? WHERE id=?",

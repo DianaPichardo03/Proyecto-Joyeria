@@ -4,18 +4,23 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
-const path = require("path");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+
+const cloudinary = require("cloudinary").v2; 
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-const uploadsPath = path.join(__dirname, "uploads");
-app.use("/uploads", express.static(uploadsPath));
+cloudinary.config({ 
+  cloud_name: process.env.CLOUD_NAME, 
+  api_key: process.env.API_KEY, 
+  api_secret: process.env.API_SECRET, 
+});
 
 
 const db = mysql.createConnection({
@@ -39,13 +44,12 @@ db.connect((err) => {
 });
 
 
-const storage = multer.diskStorage({
-  destination: "uploads/",
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
-
+const storage = new CloudinaryStorage({ 
+  cloudinary, params: { 
+    folder: "joyeria", 
+    allowed_formats: ["jpg", "png", "jpeg", "webp"], 
+  }, 
+}); 
 const upload = multer({ storage });
 
 
@@ -117,7 +121,7 @@ app.post(
   upload.single("imagen"),
   (req, res) => {
     const { nombre, precio, stock } = req.body;
-    const imagen = req.file ? req.file.filename : "";
+    const imagen = req.file ? req.file.path : "";
 
     db.query(
       "INSERT INTO productos (nombre,precio,stock,imagen) VALUES (?,?,?,?)",
@@ -156,7 +160,7 @@ app.put(
   if (!req.file){
     return res.status(400).json({ error: "No se subió imagen", });
   }
-    const imagen = req.file.filename;
+    const imagen = req.file.path;
 
     db.query(
       "UPDATE productos SET imagen=? WHERE id=?",

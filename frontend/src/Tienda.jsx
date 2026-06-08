@@ -286,7 +286,10 @@ function Tienda() {
               }}
             >
               <img
-                src={`${API_URL}/uploads/${p.imagen}`}
+                src={p.imagen?.startsWith("http") 
+                  ? p.imagen 
+                  : `${API_URL}/uploads/${p.imagen}` 
+                }
                 style={{
                   width: "100%",
                   borderRadius: 10,

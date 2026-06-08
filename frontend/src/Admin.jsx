@@ -362,7 +362,11 @@ function Admin() {
             }}
           >
             <img
-              src={p.imagen}
+              src={
+                p.imagen?.startsWith("http") 
+                ? p.imagen 
+                : `${API_URL}/uploads/${p.imagen}` 
+              }
               alt= {p.nombre}
               style={{
                 width: "100%",

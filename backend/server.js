@@ -124,10 +124,7 @@ app.post(
     const { nombre, precio, stock } = req.body;
     let imagen = "";
     if (req.file) { 
-      const result = await cloudinary.uploader.upload( 
-        req.file.path 
-      ); 
-      imagen = result.secure_url; 
+       imagen = req.file.path;
     }
 
     db.query(
@@ -175,9 +172,8 @@ app.put(
   if (!req.file){
     return res.status(400).json({ error: "No se subió imagen", });
   }
-    const result = await cloudinary.uploader.upload(req.file.path); 
-    const imagen = result.secure_url;
-
+  const imagen = req.file.path;
+  
     db.query(
       "UPDATE productos SET imagen=? WHERE id=?",
       [imagen, req.params.id],

@@ -127,6 +127,9 @@ app.post(
        imagen = req.file.path;
     }
 
+    console.log(req.file); 
+    console.log("IMAGEN:", imagen);
+
     db.query(
       "INSERT INTO productos (nombre,precio,stock,imagen) VALUES (?,?,?,?)",
       [nombre, precio, stock, imagen],

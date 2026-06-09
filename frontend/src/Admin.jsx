@@ -90,7 +90,8 @@ function Admin() {
       form,
       {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -100,6 +101,7 @@ function Admin() {
 
     alert("Producto agregado ✅");
   } catch (err) {
+    console.log(err.response?.data); 
     console.log(err);
     alert("Error al agregar producto ❌");
   }
@@ -134,6 +136,7 @@ function Admin() {
           {
             headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
         );
@@ -364,8 +367,8 @@ function Admin() {
             <img
               src={
                 p.imagen?.startsWith("http") 
-                ? p.imagen 
-                : `${API_URL}/uploads/${p.imagen}` 
+                  ? p.imagen 
+                  : `${API_URL}/uploads/${p.imagen}` 
               }
               alt= {p.nombre}
               style={{

@@ -16,6 +16,8 @@ dist-ssr
 *.local
 
 .env
+frontend/.env
+backend/.env
 uploads
 
 # Editor directories and files

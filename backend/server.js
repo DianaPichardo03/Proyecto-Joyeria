@@ -4,26 +4,26 @@ const express = require("express");
 const mysql = require("mysql2");
 const cors = require("cors");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
-const cloudinary = require("cloudinary").v2; 
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-cloudinary.config({ 
-  cloud_name: process.env.CLOUD_NAME, 
-  api_key: process.env.API_KEY, 
-  api_secret: process.env.API_SECRET, 
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
 });
 
-
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -32,26 +32,22 @@ const db = mysql.createConnection({
   ssl: {
     rejectUnauthorized: false,
   },
-    
+    waitForConnections: true, 
+    connectionLimit: 10, 
+    queueLimit: 0,
 });
 
-db.connect((err) => {
-  if (err){
-     console.log(err);
-  } else {
-     console.log("DB conectada 🟢");
-  }
+console.log("DB pool listo 🟢");
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "broqueles",
+    allowed_formats: ["jpg", "jpeg", "png", "webp"],
+  },
 });
 
-
-const storage = new CloudinaryStorage({ 
-  cloudinary, params: { 
-    folder: "joyeria", 
-    allowed_formats: ["jpg", "png", "jpeg", "webp"], 
-  }, 
-}); 
 const upload = multer({ storage });
-
 
 const ADMIN_USER = {
   usuario: "admin",
@@ -106,6 +102,11 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+app.use((req, res, next) => { 
+  console.log("REQUEST:", req.method, req.url); 
+  next(); 
+});
+
 app.get("/api/productos", (req, res) => {
   db.query("SELECT * FROM productos", (err, r) => {
     if (err) {
@@ -118,41 +119,40 @@ app.get("/api/productos", (req, res) => {
 
 app.post(
   "/api/productos", verifyToken,
+  (req, res, next) => {
+    console.log("ANTES DE MULTER");
+    next();
+  },
   upload.single("imagen"),
-  async (req, res) => {
-    try{
+  (req, res) => {
+    
+      console.log("BODY:", req.body);
+      console.log("FILE:", req.file);
+
     const { nombre, precio, stock } = req.body;
     let imagen = "";
     if (req.file) { 
-       imagen = req.file.path;
+       imagen =  req.file.path;
     }
-
-    console.log(req.file); 
-    console.log("IMAGEN:", imagen);
 
     db.query(
       "INSERT INTO productos (nombre,precio,stock,imagen) VALUES (?,?,?,?)",
       [nombre, precio, stock, imagen],
       (err) => {
         if (err){
+          console.log("MYSQL ERROR:", err);
            return res.status(500).json(err);
         }
         res.json({ ok: true });
       }
     );
   }
-  catch (err) { 
-    console.log("ERROR CLOUDINARY:", err); 
-    res.status(500).json({ 
-      error: "Error al subir imagen", 
-    }); 
-  } 
-} 
 );
 
 
 
-app.put("/api/productos/:id", verifyToken, (req, res) => {
+app.put("/api/productos/:id", verifyToken, 
+  (req, res) => {
   const { nombre, precio, stock } = req.body;
 
   db.query(
@@ -172,17 +172,23 @@ app.put(
   "/api/productos/imagen/:id", verifyToken,
   upload.single("imagen"),
   (req, res) => {
-  if (!req.file){
-    return res.status(400).json({ error: "No se subió imagen", });
-  }
-  const imagen = req.file.path;
+
+    if (!req.file) { 
+    return res.status(400).json({ 
+      error: "No se subió imagen", 
+    }); 
+  } 
+     
+    const imagen = req.file.path;
   
     db.query(
       "UPDATE productos SET imagen=? WHERE id=?",
       [imagen, req.params.id],
       (err) => {
+
         if (err) {
-           return res.status(500).json(err);
+          console.log("MYSQL ERROR:", err);
+          return res.status(500).json(err);
         }
         res.json({ ok: true });
       }
@@ -268,6 +274,13 @@ app.delete("/api/pedidos/:id", verifyToken, (req, res) => {
 });
 
 
+app.use((err, req, res, next) => {
+  console.log("ERROR GLOBAL:"); 
+  console.log(err);
+   res.status(500).json({ 
+    error: err.message, 
+  }); 
+});
 
 app.listen(process.env.PORT || 3001, () => {
   console.log("Server listo 🚀");
